@@ -42,7 +42,7 @@ onUnmounted(()=> {
 
 <template>
 
- <div ref="banner" class="slide_in_banner" :class="{slide? 'slide_in_banner_show': '' }" 
+ <div ref="banner" class="slide_in_banner" :class="{'slide_in_banner_show': slide }" 
                               :style="{height: height? height + 'vh': '15vh'}">
   {{text}}
 
