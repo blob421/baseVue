@@ -4,17 +4,18 @@ import {ref, toRefs, computed} from 'vue'
 import {FormValidator} from '@/utility/form_validator.ts';
 
 const {password, passwordConfirm, passwordsMatch, email, name, isEmailValid,
-    firstName, lastName, passwordStrength
+    firstName, lastName, passwordStrength, userName
 } = FormValidator()
 
 type Form = {
     title: string, useName?: 'full' | 'split', age?: boolean, tickboxes?: {label: string, value:boolean}[],
-                   useEmail: boolean, apiUrl: string, bgColor?: string, color?: string, shadowColor?: string
+                   useEmail: boolean, apiUrl: string, bgColor?: string, color?: string, shadowColor?: string,
+                   useUsername?: boolean
 }
 
 const form = defineProps<Form>()
 
-const {useName, useEmail, title, apiUrl} = toRefs(form)
+const {useName, useEmail, title, apiUrl, useUsername} = toRefs(form)
 
 const left_col_inputs = [{name: 'First Name', type: 'text', value: firstName, use: useName.value == 'split'}, 
                          {name: 'Last Name', type: 'text', value: lastName, use: useName.value == 'split'},
@@ -22,6 +23,7 @@ const left_col_inputs = [{name: 'First Name', type: 'text', value: firstName, us
                          {name: 'Email', type: 'email', value: email, use: useEmail.value}]
 
 const right_col_inputs = [ 
+                          {name: 'Username', type: 'text', value: userName, use: useUsername.value == true},
                           {name: 'New Password', type: 'password', value: password, use: true},
                           {name: 'Confirm Password', type: 'password', value: passwordConfirm, use:true}]
 
