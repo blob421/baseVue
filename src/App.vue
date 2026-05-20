@@ -8,7 +8,7 @@ const paths = ['/banners', '/forms']
 <template>
   <div class="container-fluid p-0 m-0">
   <nav>
-    <button v-for="(b, idx) in paths" v-on:click="router.push(b)" :key="idx">
+    <button v-for="(b, idx) in paths" v-on:click="router.push(b)" :key="idx" class="txt_md">
        {{b.charAt(1)?.toUpperCase() + b.slice(2)}}
     </button>
     
@@ -44,5 +44,6 @@ font-size: max(1.3vw, 2.2vh) !important;
 .txt_xl{
     font-size: max(2.3vw, 3vh) !important;
 }
+
 
 </style>

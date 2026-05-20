@@ -30,8 +30,8 @@ const right_col_inputs = [
 
 <template>
 
-<div class="row d-flex justify-content-center p-0 m-0">
-    <form class="split_form_main col-lg-7 col-sm-12 col-11 pt-lg-3 pt-4 p-sm-5 p-2 p-lg-5 pb-5" 
+<div class="row d-flex justify-content-center p-0 m-0" form_row>
+    <form class="split_form_main col-lg-7 col-11 pt-lg-3 pt-4 p-sm-5 p-2 p-lg-5 pb-5" 
           method="POST" :action="apiUrl" 
            :style="{backgroundColor: bgColor? bgColor : 'rgb(52, 55, 65)',
             boxShadow: shadowColor ? `inset 0 0 12px min(0.4vw, 0.7vh) ${shadowColor}` 
@@ -42,21 +42,25 @@ const right_col_inputs = [
         <div class="row justify-content-center d-flex p-0 m-0">
        
 
-            <div class="col-lg-6 col-12 form_col txt_sm p-4 gap-5">
+            <div class="col-lg-6 col-12 form_col txt_sm p-4 pb-2 pt-0 gap-2">
 
                 <template v-for="(f, i) in left_col_inputs" :key="i">
                         <div v-if='f.use' class="field_wrapper d-flex flex-column 
-                                                 justfy-content-center align-items-start gap-3 gap-md-2">
+                                                 justfy-content-center align-items-start gap-1 gap-md-2">
 
-                            <div class="field_name" :style="{color: color? color : 'white'}">
+                            <div class="field_name pb-2" :style="{color: color? color : 'white'}">
                                 {{ f.name }}
                             </div>
-
+                            
                             <input :type="f.type" v-model="f.value.value" required/>
-                              <div v-if="f.type == 'email' && !isEmailValid" 
-                              class="txt_xs error_password">
-                                   Invalid email
+
+                            <div class="error_cont p-0 m-0">
+                                <div v-if="f.type == 'email' && !isEmailValid" 
+                                class="txt_xs error_password">
+                                    Invalid email
+                                </div>
                               </div>
+
                         </div>
 
          
@@ -64,31 +68,35 @@ const right_col_inputs = [
                 </template> 
             </div>
 
-                <div class="col-lg-6 col-12 form_col txt_sm p-4 pt-lg-4 pt-4 pt-sm-4 gap-5 pb-5">
+                <div class="col-lg-6 col-12 form_col txt_sm p-4 pt-0 pt-sm-0 gap-2 pb-5">
                     
                     <template v-for="(f, i) in right_col_inputs" :key="i">
                             <div v-if='f.use' class="field_wrapper d-flex flex-column 
-                            justfy-content-center align-items-start gap-3 gap-md-2">
+                            justfy-content-center align-items-start gap-1 gap-md-2">
 
-                                    <div class="field_name" :style="{color: color? color : 'white'}">
+                                <div class="field_name pb-2" :style="{color: color? color : 'white'}">
                                         {{ f.name }}
-                                    </div>
-                                    <input :type="f.type"  v-model="f.value.value" required/>
+                                </div>
+                                <input :type="f.type"  v-model="f.value.value" required/>
 
-                            <div v-if="f.name == 'New Password' && passwordStrength" 
-                            class="txt_xs error_password pl-1" 
+                            <div class="error_cont p-0 m-0">
 
-                            :class="{'pass_strong': passwordStrength && passwordStrength.code == 1,
-                                     'pass_moderate': passwordStrength && passwordStrength.code == 2,
-                                     'pass_weak': passwordStrength && passwordStrength.code == 3
-                            }">
-                               {{ passwordStrength.msg }}
-                           </div>
+                           
+                                <div v-if="f.name == 'New Password' && passwordStrength" 
+                                class="txt_xs error_password pl-1" 
 
-                            <div v-if="f.name == 'Confirm Password' && !passwordsMatch" 
-                            class="txt_xs error_password">
-                                 Passwords don't match
-                            </div>
+                                :class="{'pass_strong': passwordStrength && passwordStrength.code == 1,
+                                        'pass_moderate': passwordStrength && passwordStrength.code == 2,
+                                        'pass_weak': passwordStrength && passwordStrength.code == 3
+                                }">
+                                {{ passwordStrength.msg }}
+                                </div>
+
+                                <div v-if="f.name == 'Confirm Password' && !passwordsMatch" 
+                                class="txt_xs error_password">
+                                    Passwords don't match
+                                </div>
+                             </div>
                             </div>
           
                         
@@ -117,21 +125,24 @@ const right_col_inputs = [
     width: 101%; 
 }
 .field_name{
-  font-weight: bold; margin-top: 1vh;
+  font-weight: bold;
 }
 .form_col{
     display: flex; flex-direction: column; 
 }
 .title_form{
-   margin-bottom: min(5vh, 3vw);
+   margin-bottom: min(10vh, 10vw);
 }
 
 input {
   width: 99.5%; padding-left: max(0.3vw, 0.5vh);
 }
+.error_cont{
+    height: 5vh;  width: 100%;
+}
 .error_password{
-    background-color: rgb(225, 209, 102); color: black; position: absolute; bottom: -5.2vh; 
-    height: 4.2vh; 
+    background-color: rgb(225, 209, 102); color: black;
+    height: 4.2vh;
     display: flex; align-items: center; padding-left: max(0.3vw, 0.5vh);
     width: 100%; border: 2px solid black; border-radius: 4px; margin: 0; 
 }
@@ -149,6 +160,13 @@ input {
     display: flex; justify-content: flex-end;
 }
 .form_submit{
-    margin-top: 5vh;  width: max(12vw, 18vh); height: max(7vh, 4vw); display: flex; align-items: center;
+     width: max(12vw, 18vh); height: max(7vh, 4vw); display: flex; align-items: center;
+}
+
+@media (orientation: portrait) and (min-width: 820px) {
+   .split_form_main {
+    flex: 0 0 90% !important
+   }
 }
 </style>
+
