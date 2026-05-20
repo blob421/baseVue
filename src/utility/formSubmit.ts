@@ -3,7 +3,7 @@ import { useRouter } from "vue-router"
 const router = useRouter()
 
 export async function submitForm(url:string, fallbackRoute:string, successRoute: string, data:object){
-    
+
     const resp = await fetch(url, {
         credentials: 'include',
         body: JSON.stringify(data)
@@ -16,3 +16,4 @@ export async function submitForm(url:string, fallbackRoute:string, successRoute:
        await router.push(fallbackRoute)
     }
 }
+

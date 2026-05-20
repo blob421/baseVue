@@ -13,7 +13,7 @@ const routes = [
   },
   {
     name: 'forms',
-    component: import('@/pages/forms.vue'),
+    component: () => import('@/pages/forms.vue'),
     path: '/forms',
     meta: {requiresAuth: false}
   }

@@ -1,31 +1,19 @@
 <script setup lang="ts">
 import {ref, toRefs, computed} from 'vue'
-
 import {FormValidator} from '@/utility/form_validator.ts';
 
-const {password, passwordConfirm, passwordsMatch, email, name, isEmailValid,
-    firstName, lastName, passwordStrength, userName
-} = FormValidator()
+import type { FormProps, FilteredFormFields} from '@/types';
 
-type Form = {
-    title: string, useName?: 'full' | 'split', age?: boolean, tickboxes?: {label: string, value:boolean}[],
-                   useEmail: boolean, apiUrl: string, bgColor?: string, color?: string, shadowColor?: string,
-                   useUsername?: boolean
-}
 
-const form = defineProps<Form>()
 
-const {useName, useEmail, title, apiUrl, useUsername} = toRefs(form)
+const form = defineProps<FormProps>()
+const propsCopy = {...form}
+const validator = FormValidator(propsCopy, true)
+const [fieldsLeft, fieldsRight] = validator.fields.data as Array<Array<FilteredFormFields>>
+const {title, url, bgColor, shadowColor, color} = toRefs(form)
 
-const left_col_inputs = [{name: 'First Name', type: 'text', value: firstName, use: useName.value == 'split'}, 
-                         {name: 'Last Name', type: 'text', value: lastName, use: useName.value == 'split'},
-                         {name: 'Full Name', type: 'text', value: name, use: useName.value == 'full'}, 
-                         {name: 'Email', type: 'email', value: email, use: useEmail.value}]
 
-const right_col_inputs = [ 
-                          {name: 'Username', type: 'text', value: userName, use: useUsername.value == true},
-                          {name: 'New Password', type: 'password', value: password, use: true},
-                          {name: 'Confirm Password', type: 'password', value: passwordConfirm, use:true}]
+
 
 
 </script>
@@ -34,7 +22,7 @@ const right_col_inputs = [
 
 <div class="row d-flex justify-content-center p-0 m-0" form_row>
     <form class="split_form_main col-lg-7 col-11 pt-lg-3 pt-4 p-sm-5 p-2 p-lg-5 pb-5" 
-          method="POST" :action="apiUrl" 
+          method="POST" :action="url" 
            :style="{backgroundColor: bgColor? bgColor : 'rgb(52, 55, 65)',
             boxShadow: shadowColor ? `inset 0 0 12px min(0.4vw, 0.7vh) ${shadowColor}` 
                                    : 'none'
@@ -46,18 +34,18 @@ const right_col_inputs = [
 
             <div class="col-lg-6 col-12 form_col txt_sm p-4 pb-2 pt-0 gap-2">
 
-                <template v-for="(f, i) in left_col_inputs" :key="i">
-                        <div v-if='f.use' class="field_wrapper d-flex flex-column 
+                <template v-for="(f, i) in fieldsLeft" :key="i">
+                        <div class="field_wrapper d-flex flex-column 
                                                  justfy-content-center align-items-start gap-1 gap-md-2">
 
                             <div class="field_name pb-2" :style="{color: color? color : 'white'}">
-                                {{ f.name }}
+                                {{ f.string }}
                             </div>
                             
                             <input :type="f.type" v-model="f.value.value" required/>
 
                             <div class="error_cont p-0 m-0">
-                                <div v-if="f.type == 'email' && !isEmailValid" 
+                                <div v-if="f.type == 'email' && !validator.isEmailValid?.value" 
                                 class="txt_xs error_password">
                                     Invalid email
                                 </div>
@@ -72,29 +60,29 @@ const right_col_inputs = [
 
                 <div class="col-lg-6 col-12 form_col txt_sm p-4 pt-0 pt-sm-0 gap-2 pb-5">
                     
-                    <template v-for="(f, i) in right_col_inputs" :key="i">
-                            <div v-if='f.use' class="field_wrapper d-flex flex-column 
+                    <template v-for="(f, i) in fieldsRight" :key="i">
+                            <div class="field_wrapper d-flex flex-column 
                             justfy-content-center align-items-start gap-1 gap-md-2">
 
                                 <div class="field_name pb-2" :style="{color: color? color : 'white'}">
-                                        {{ f.name }}
+                                        {{ f.string }}
                                 </div>
                                 <input :type="f.type"  v-model="f.value.value" required/>
 
                             <div class="error_cont p-0 m-0">
 
                            
-                                <div v-if="f.name == 'New Password' && passwordStrength" 
+                                <div v-if="f.string == 'New Password' && validator.passwordStrength" 
                                 class="txt_xs error_password pl-1" 
 
-                                :class="{'pass_strong': passwordStrength && passwordStrength.code == 1,
-                                        'pass_moderate': passwordStrength && passwordStrength.code == 2,
-                                        'pass_weak': passwordStrength && passwordStrength.code == 3
+                                :class="{'pass_strong':  validator.passwordStrength.value?.code == 1,
+                                        'pass_moderate':  validator.passwordStrength.value?.code == 2,
+                                        'pass_weak':  validator.passwordStrength.value?.code == 3
                                 }">
-                                {{ passwordStrength.msg }}
+                                {{  validator.passwordStrength.value?.msg }}
                                 </div>
 
-                                <div v-if="f.name == 'Confirm Password' && !passwordsMatch" 
+                                <div v-if="f.string == 'Confirm Password' && ! validator.passwordsMatch?.value" 
                                 class="txt_xs error_password">
                                     Passwords don't match
                                 </div>
@@ -107,7 +95,8 @@ const right_col_inputs = [
             </div>
         </div>
          <div class="input_cont p-4 pt-2 pt-md-5 txt_md">
-              <input :disabled="password.length < 8 || !passwordsMatch || passwordConfirm.length < 8" type="submit" value="submit" class="form_submit"/>
+              <input :disabled="!validator.passwordsMatch?.value 
+                      || validator.passwordStrength?.value.code == 0" type="submit" value="submit" class="form_submit"/>
 
          </div>
       

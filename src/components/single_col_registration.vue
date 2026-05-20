@@ -2,70 +2,43 @@
 
 import { FormValidator } from '@/utility/form_validator';
 import { submitForm } from '@/utility/formSubmit';
-import { computed, toRefs, ref } from 'vue';
-
-const {password, passwordConfirm, passwordsMatch, email, name, isEmailValid,
-    firstName, lastName, passwordStrength, userName, usernameValid, isPasswordValid
-} = FormValidator(true)
+import { toRefs } from 'vue';
+import type {FormProps, FilteredFormFields } from '@/types';
 
 
+const formProps = defineProps<FormProps>()
+const PropsCopy = {...formProps}
 
+const validator = FormValidator(PropsCopy)
+const {url, title} = toRefs(formProps)
 
-type Form = {
-    fields?: {name: string, type: string, value: string}, url: string, formTitle: string, useEmail:boolean
-}
-const formProps = defineProps<Form>()
-const {fields, url, formTitle, useEmail} = toRefs(formProps)
-
-const company = ref('')
-const fieldsData = computed(()=>{
-
-    let init:Record<string, any> = {}
-
-    formFields.forEach(field => {
-        if (field.use){
-            init = {...init, ...field.value}
-        }
-    })
-    return init
-  
-})
-
-const formFields = [{name: 'First Name', type: 'text', value: firstName, use:true},
-                  {name: 'Last Name', type: 'text', value: lastName, use:true},
-                  {name: 'Username', type: 'text', value: userName, use: true},
-                  {name: 'New Password', type: 'password', value: password, use: true},
-                  {name: 'Confirm Password', type: 'password', value: passwordConfirm, use:true},
-                  {name: 'Email', type: 'email', value: email, use: useEmail.value},
-                  {name: 'Company', type: 'text', value: company, use: true},
-                 ]
 </script>
 
 
 <template>
 
   <div class="row d-flex justify-content-center">
-     
-    <form class="user_form" @submit.prevent="submitForm(url, '/', '/success', fieldsData)">
+      <div class="col-11 col-md-8 col-lg-4 form_main_col">
+    <form class="user_form" @submit.prevent="submitForm(url, '/', '/success', validator.fieldsData.value)">
 
-        <div class="col-11 col-md-4">
+       
 
             <h1 class="txt_xl pb-5">
 
-             {{ formTitle }}
+             {{ title }}
 
             </h1>
            
 
-        </div>
-        <div v-for="(f, idx) in formFields" class="input_div txt_sm">
-               <input :type="f.type" :placeholder="f.name" v-model="f.value.value" required>
+        
+        <div v-for="(f, idx) in validator.fields.data" class="input_div txt_sm" :key="idx">
+               <input :type="f.type" :placeholder="f.string" v-model="f.value.value" required>
 
-               <div v-if="!usernameValid && f.name == 'Username'" class="text_guide txt_xs pt-3 pb-2">
+               <div v-if="!validator.usernameValid?.value && f.string == 'Username'" class="txt_xs pt-3 pb-2">
                 1-21 characters
               </div>
 
-               <ul v-if="!isPasswordValid && f.name == 'New Password'" class="text_guide_ul txt_xs pt-3 pb-0">
+               <ul v-if="!validator.isPasswordStrong?.value && f.string == 'Password'" class="text_guide_ul txt_xs pt-3 pb-0">
                     <li>
                         At least one uppercase letter
                     </li>
@@ -80,11 +53,11 @@ const formFields = [{name: 'First Name', type: 'text', value: firstName, use:tru
                     </li>
                 </ul>
 
-                <div v-if="!passwordsMatch && f.name == 'Confirm Password'" class="txt_xs pt-2 pb-2">
+                <div v-if="!validator.passwordsMatch?.value && f.string == 'Confirm Password'" class="txt_xs pt-2 pb-2">
                      Passwords don't match
                 </div>
 
-                 <div v-if="!isEmailValid && f.name == 'Email'" class="text_guide pt-2 pb-2"> 
+                 <div v-if="!validator.isEmailValid?.value && f.string == 'Email'" class="pt-2 pb-2"> 
                     example@provider.com   
                  </div>
         </div>
@@ -93,8 +66,9 @@ const formFields = [{name: 'First Name', type: 'text', value: firstName, use:tru
            <div class="input_div txt_md pt-3">
           <input type="submit" value="Register" style="height: 6vh;" />
           </div>
+
     </form>
-    
+    </div>
   </div>
 
 
@@ -113,15 +87,20 @@ const formFields = [{name: 'First Name', type: 'text', value: firstName, use:tru
 .user_form{
   gap: 1vh; display: flex; flex-direction: column; background-color: antiquewhite;
   padding: 3%; justify-content: center;  align-items: center; padding-top: 4vh;
-  border-radius: 4px; border: 1px solid black; position: relative; width: 30vw;
+  border-radius: 4px; border: 1px solid black;
  
 }
 ul {
-  padding-left: 1.1vw;
+  padding-left: max(1.1vw, 1.8vh);
  
 }
 input{
   width: 100%; height: 5.5vh; 
 }
 
+@media (orientation: portrait) and (min-width: 820px){
+    .form_main_col{
+        flex: 0 0 90%;
+    }
+}
 </style>
