@@ -10,6 +10,12 @@ const routes = [
    name: 'banners',
    meta: {requiresAuth: false}
   
+  },
+  {
+    name: 'forms',
+    component: import('@/pages/forms.vue'),
+    path: '/forms',
+    meta: {requiresAuth: false}
   }
 ]
 

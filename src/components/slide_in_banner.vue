@@ -51,7 +51,7 @@ onUnmounted(()=> {
 </template>
 
 
-<style>
+<style scoped>
  .slide_in_banner {
     width: 100%; transform: translateX(-100%); transition: transform 2s ease;
     background-color: black; color: white;

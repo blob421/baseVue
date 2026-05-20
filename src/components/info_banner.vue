@@ -21,12 +21,10 @@ onMounted(()=> {
 
     interval.value = window.setInterval(()=> {
     
-    if (index_arr.value){
+        if (index_arr.value){
      
-       
-   
-
-       index_arr.value = [...index_arr.value.slice(1), 
+ 
+        index_arr.value = [...index_arr.value.slice(1), 
                            ...index_arr.value.slice(0, 1)]
 
         }
@@ -106,7 +104,7 @@ onUnmounted(()=> {
 
 </template>
 
-<style>
+<style scoped>
 
 .info_banner{
      width: 100vw; 
