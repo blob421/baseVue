@@ -3,7 +3,7 @@ import {ref, computed} from 'vue'
 import type { FormProps, FormFields, FilteredFormFields} from '@/types'
 
 
-export function FormValidator(props:FormProps, split=false){
+export function FormValidator(props:FormProps){
 
     //////////////////////////////////////////// REFS ///////////////////////////////////////////////////////
 
@@ -34,7 +34,7 @@ export function FormValidator(props:FormProps, split=false){
 
     ]
     let fields:any = {}
-    if (!split){
+    if (!props.splitCol){
         fields['type'] = 'one'
         fields['data'] = [fieldMapping.filter((f)=> {
                 if(f.value){

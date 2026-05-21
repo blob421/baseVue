@@ -8,7 +8,7 @@ import { submitForm } from '@/utility/formSubmit';
 const props = defineProps<FormProps>()
 const propsCopy = {...props}
 
-const validator = FormValidator(propsCopy, true)
+const validator = FormValidator(propsCopy)
 const {title, url, color, bgColor} = toRefs(props)
 
 
@@ -34,8 +34,9 @@ const {title, url, color, bgColor} = toRefs(props)
                                                             :class="{'red_borders':!validator.isEmailValid?.value && f.name =='email'}"
                                                             v-model="f.value.value" :placeholder="f.string">
 
-                        <textarea v-if="f.type == 'textarea'" v-model="f.value.value" :placeholder="f.string" 
-                                                                :maxlength="200" class="textarea_form">
+                        <textarea v-if="f.type == 'textarea'" v-model="f.value.value" required
+                                                              :placeholder="f.string" 
+                                                              :maxlength="200" class="textarea_form">
 
                         </textarea>
                         <div class="error_container txt_sm">
