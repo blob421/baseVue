@@ -1,19 +1,17 @@
 <script setup lang="ts">
+import nav_classic from './components/navbars/nav_classic.vue';
+import spacer from './components/spacer.vue';
+const paths = ['/home', '/banners', '/forms', '/success']
 
-import router from './router';
-
-const paths = ['/banners', '/forms']
 </script>
 
 <template>
   <div class="container-fluid p-0 m-0">
   <nav>
-    <button v-for="(b, idx) in paths" v-on:click="router.push(b)" :key="idx" class="txt_md">
-       {{b.charAt(1)?.toUpperCase() + b.slice(2)}}
-    </button>
-    
-
+    <nav_classic :sections="paths" icon="/favicon.ico" :side-ham="true"/>
+  
   </nav>
+  <spacer :h="6" />
 </div>
 
 
@@ -45,5 +43,7 @@ font-size: max(1.3vw, 2.2vh) !important;
     font-size: max(2.3vw, 3vh) !important;
 }
 
-
+html, body {
+  overflow-x: hidden;
+}
 </style>

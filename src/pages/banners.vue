@@ -1,7 +1,7 @@
 <script setup lang="ts">
 
-import slide_in_banner from '@/components/slide_in_banner.vue';
-import info_banner from '@/components/info_banner.vue';
+import slide_in_banner from '@/components/banners/slide_in_banner.vue';
+import info_banner from '@/components/banners/info_banner.vue';
 
 </script>
 
