@@ -4,7 +4,9 @@ import type { FormProps, FormFields, FilteredFormFields} from '@/types'
 
 
 export function FormValidator(props:FormProps, split=false){
-  
+
+    //////////////////////////////////////////// REFS ///////////////////////////////////////////////////////
+
     const company = props.useCompany ? ref('') : null
     const password = props.usePasswords || props.useAltPassword ? ref('') : null
     const passwordConfirm = props.usePasswords || props.useAltPassword ? ref('') : null
@@ -13,7 +15,9 @@ export function FormValidator(props:FormProps, split=false){
     const firstName = props.useNames ? ref('') : null
     const lastName = props.useNames ? ref('') : null
     const username = props.useUsername ? ref('') : null
- 
+    const message = props.useMessage ? ref('') : null
+
+    ////////////////////////////////////////// FIELDS MAPPING //////////////////////////////////////////////
  
     const fieldMapping:FormFields[] = [
 
@@ -26,16 +30,17 @@ export function FormValidator(props:FormProps, split=false){
         {'name': "password", 'string': 'Password', 'type': 'password', 'value': password},
         {'name': "passwordConfirm", 'string': 'Confirm Password', 'type': 'password', 'value': passwordConfirm},
         {'name': "company", 'string': 'Company', 'type': 'text', 'value': company},
+        {'name': 'message', 'string': 'Message', 'type': 'textarea', 'value': message}
 
     ]
     let fields:any = {}
     if (!split){
         fields['type'] = 'one'
-        fields['data'] = fieldMapping.filter((f)=> {
+        fields['data'] = [fieldMapping.filter((f)=> {
                 if(f.value){
                     return f
                 }
-            })
+            })]
     }
     else {
             let result:Array<FormFields> = []
@@ -56,6 +61,7 @@ export function FormValidator(props:FormProps, split=false){
     }
 
 
+   ////////////////////////////////////// COMPUTED FIELDS CHECKS //////////////////////////////////////
 
     const strongPassword = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#|")(_^-]).{8,}$/;
     const moderatePassword = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/
@@ -70,30 +76,31 @@ export function FormValidator(props:FormProps, split=false){
 
   
   
-    const isPasswordStrong = computed(() => {
-        console.log('testing')
-        const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
-        if (password)
+    const isPasswordStrong = password && computed(() => {
+       
+        const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).{8,}$/;
+     
         return passwordRegex.test(password.value);
     });
 
    
-    const passwordStrength = computed(()=>{
-           if (password)
+    const passwordStrength = password && computed(()=>{
+       
 
             if (password.value.length < 8 && password.value.length > 1){
-                return {code: 0, msg: 'Minimum 8 characters'}
+                return {code: 1, msg: 'Minimum 8 characters'}
             }
             else if (strongPassword.test(password.value)){
-                return {code: 1, msg: 'Strong'}
+                return {code: 2, msg: 'Strong'}
             }
             else if (moderatePassword.test(password.value)){
-                return {code: 2, msg: 'Moderate'}
+                return {code: 3, msg: 'Moderate'}
             }
             else if (weakPassword.test(password.value)){
-                return {code: 3, msg: 'Weak'}
+                return {code: 4, msg: 'Weak'}
             }
-           return {code: undefined, msg:null}
+        
+           return {code: 0, msg:null}
         }
         
     )
@@ -110,6 +117,9 @@ export function FormValidator(props:FormProps, split=false){
         }
         return true
     })
+
+    //////////////////////////////////////  FORM HANDLING  //////////////////////////////////////////////////
+
 
     const fieldsData = computed(()=>{
 

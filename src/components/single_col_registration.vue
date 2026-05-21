@@ -3,7 +3,7 @@
 import { FormValidator } from '@/utility/form_validator';
 import { submitForm } from '@/utility/formSubmit';
 import { toRefs } from 'vue';
-import type {FormProps, FilteredFormFields } from '@/types';
+import type { FormProps } from '@/types';
 
 
 const formProps = defineProps<FormProps>()
@@ -38,7 +38,7 @@ const {url, title} = toRefs(formProps)
                 1-21 characters
               </div>
 
-               <ul v-if="!validator.isPasswordStrong?.value && f.string == 'Password'" class="text_guide_ul txt_xs pt-3 pb-0">
+               <ul v-if="!validator.isPasswordStrong?.value && f.name == 'password'" class="text_guide_ul txt_xs pt-3 pb-0">
                     <li>
                         At least one uppercase letter
                     </li>

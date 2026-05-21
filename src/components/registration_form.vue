@@ -72,12 +72,12 @@ const {title, url, bgColor, shadowColor, color} = toRefs(form)
                             <div class="error_cont p-0 m-0">
 
                            
-                                <div v-if="f.string == 'New Password' && validator.passwordStrength" 
+                                <div v-if="f.name == 'password' && validator.passwordStrength?.value.code" 
                                 class="txt_xs error_password pl-1" 
 
-                                :class="{'pass_strong':  validator.passwordStrength.value?.code == 1,
-                                        'pass_moderate':  validator.passwordStrength.value?.code == 2,
-                                        'pass_weak':  validator.passwordStrength.value?.code == 3
+                                :class="{'pass_strong':  validator.passwordStrength.value?.code == 2,
+                                        'pass_moderate':  validator.passwordStrength.value?.code == 3,
+                                        'pass_weak':  validator.passwordStrength.value?.code == 4
                                 }">
                                 {{  validator.passwordStrength.value?.msg }}
                                 </div>
