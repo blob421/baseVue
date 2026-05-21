@@ -126,7 +126,7 @@ export function FormValidator(props:FormProps){
         let data:Record<string, any> = {}
         
         if (fields['type'] == 'one'){
-            const fieldData = fields['data'] as Array<FilteredFormFields>
+            const fieldData = fields['data'][0] as Array<FilteredFormFields>
                 fieldData.forEach(f=> {
 
 

@@ -9,8 +9,8 @@ import { submitForm } from '@/utility/formSubmit';
 const form = defineProps<FormProps>()
 const propsCopy = {...form}
 const validator = FormValidator(propsCopy)
-const {title, url, bgColor, shadowColor, color} = toRefs(form)
-
+const {title, apiEndpoint, bgColor, shadowColor, color} = toRefs(form)
+const apiUrl = import.meta.env.VITE_API_URL
 </script>
 
 
@@ -25,7 +25,7 @@ const {title, url, bgColor, shadowColor, color} = toRefs(form)
             boxShadow: shadowColor ? `inset 0 0 12px min(0.4vw, 0.7vh) ${shadowColor}` 
                                    : 'none'}">
 
-    <form @submit.prevent="submitForm(url, '/', '/success', validator.fieldsData.value)">
+    <form @submit.prevent="submitForm(apiUrl + apiEndpoint, '/', '/success', validator.fieldsData.value)">
 
         <h1 class="title_form pt-lg-5 pt-4 p-4 txt_xl" :style="{color: color? color : 'white'}">{{title}}</h1>
        

@@ -3,7 +3,7 @@ import type { Ref } from "vue"
 export type FormProps = {
     usePasswords?: boolean, useEmail?: boolean, useFullName?: boolean, useNames?: boolean, 
     useUsername?: boolean, useAltPassword?: boolean, useCompany?: boolean, useMessage?: boolean
-    url:string, title:string, splitCol?: boolean,
+    apiEndpoint:string, title:string, splitCol?: boolean,
     color?: string, shadowColor? :string, bgColor?: string
 }
 

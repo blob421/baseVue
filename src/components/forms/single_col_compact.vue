@@ -10,7 +10,8 @@ const formProps = defineProps<FormProps>()
 const PropsCopy = {...formProps}
 
 const validator = FormValidator(PropsCopy)
-const {url, title} = toRefs(formProps)
+const {apiEndpoint, title} = toRefs(formProps)
+const apiUrl = import.meta.env.VITE_API_URL
 
 </script>
 
@@ -19,7 +20,7 @@ const {url, title} = toRefs(formProps)
 
   <div class="row d-flex justify-content-center">
       <div class="col-11 col-sm-7 col-md-6 col-lg-4 form_main_col">
-    <form class="user_form" @submit.prevent="submitForm(url, '/', '/success', validator.fieldsData.value)">
+    <form class="user_form" @submit.prevent="submitForm(apiUrl + apiEndpoint, '/', '/success', validator.fieldsData.value)">
 
        
 
