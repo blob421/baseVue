@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import nav_classic from './components/navbars/nav_classic.vue';
 import spacer from './components/spacer.vue';
-const paths = ['/home', '/banners', '/forms', '/success']
+const paths = ['/home', '/banners', '/forms', '/success', '/charts']
 
 </script>
 

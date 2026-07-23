@@ -16,6 +16,12 @@ const routes = [
     component: () => import('@/pages/forms.vue'),
     path: '/forms',
     meta: {requiresAuth: false}
+  },
+  
+  {name: 'charts', 
+   component: ()=> import('@/pages/charts.vue'), 
+   path: '/charts', 
+   meta: {requiresAuth: false}
   }
 ]
 
